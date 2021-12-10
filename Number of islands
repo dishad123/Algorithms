@@ -1,0 +1,82 @@
+An island is a place which is surrounded by water .The direction allowed to find the number of islands are 4 (top,left,down,right)
+Note:
+0 represents water
+1 represents island
+Input1:
+Enter row:
+
+3
+Enter column:
+4
+1 1 1 1
+1 0 0 1
+1 0 0 0
+Output1:
+Number of islands:1
+Input2:
+Enter row:
+3
+Enter column:
+4
+1 1 0 1
+0 0 1 0
+0 0 0 0
+Output2:
+Number of islands:3
+
+
+PROGRAM:
+
+
+
+import java.util.*;
+
+class main{
+    public static int numberofIslands(int arr[][]){
+        int visited=0;
+        for(int i=0;i<arr.length;i++)
+        {
+            for(int j=0;j<arr[0].length;j++)
+            {
+                if(arr[i][j]==1)
+                {
+                    visited++;
+                    dfs(arr,i,j);
+                }
+            }
+        }
+        return visited;
+    }
+    
+        
+    public static void dfs(int arr[][],int i,int j){
+        if(i>=0 && j>=0 && i<arr.length && j<arr[0].length && arr[i][j]==1)
+        {
+            arr[i][j]=0;
+            dfs(arr,i-1,j);
+            dfs(arr,i,j-1);
+            dfs(arr,i+1,j);
+            dfs(arr,i,j+1);
+        }
+    }
+     public static void main(String[] args)
+    {
+        Scanner sc =new Scanner(System.in);
+        System.out.println("Enter row:");
+        int r=sc.nextInt();
+        System.out.println("Enter column:");
+        int c=sc.nextInt();
+        int [][]arr=new int[r][c];
+        for(int i=0;i<r;i++)
+        {
+            for(int j=0;j<c;j++)
+            {
+                arr[i][j]=sc.nextInt();
+            }
+        }
+        System.out.print("Number of islands:");
+        int m=numberofIslands(arr);
+        System.out.print(m);
+    
+}
+}

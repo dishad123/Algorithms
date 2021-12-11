@@ -1,64 +1,79 @@
-#include <stdio.h>
+
+#include<stdio.h>
 #include<stdbool.h>
 #include<stdlib.h>
 #include<string.h>
-#define char_to_index(c) ((int)c - (int)'a')
 
+#define ALPHABET_SIZE (26)
+#define CHAR_TO_INDEX(c) ((int)c-(int)'a')
 struct TrieNode{
-  struct TrieNode *child[26];
-  bool endofword; 
+    struct TrieNode*child[ALPHABET_SIZE];
+    bool wordEnd;
 };
 struct TrieNode *getNode(){
-    struct TrieNode *newNode = NULL;
-    newNode = (struct TrieNode*)malloc(sizeof(struct TrieNode));
-    if(newNode){
-      newNode->endofword = false;
-      for(int i=0;i<26;i++){
-        newNode->child[i] = NULL;
-      }      
-    }
-    return newNode;
-}
-void insert(struct TrieNode *root,char *key){
-    int len  =strlen(key);
-    struct TrieNode *temp = root;
-    int i,childIndex;
-    for(i = 0 ;i<len;i++){
-         childIndex = char_to_index(key[i]);//b-a=1
-         if(!temp->child[childIndex]){
-           temp->child[childIndex]=getNode();
-         }
-         temp = temp->child[childIndex];
-    }
-    temp->endofword = true;//leaf
-}
-
-bool search(struct TrieNode *root,char *key){
-    int len = strlen(key);
-    struct TrieNode *temp = root;
-    int i,childIndex;
-    for(i=0;i<len;i++){
-      childIndex = char_to_index(key[i]);
-      if(!temp->child[childIndex]){
-        return false;
+  struct TrieNode *newNode=NULL;
+  newNode=(struct TrieNode *)malloc(sizeof(struct TrieNode));
+  if(newNode){
+      newNode->wordEnd=false;
+      for(int i=0;i<ALPHABET_SIZE;i++)
+      {
+          newNode->child[i]=NULL;
       }
-      temp = temp->child[childIndex];
-    }
-  return true;
-}
-int main(void) {
-    char dictionary[][10] = {"edmatrix","a","there","answer","any","by","bye"};
-    struct TrieNode *root = getNode();
+  }
+  return newNode;
+};
 
-    for(int i=0;i<10;i++){
+void insert(struct TrieNode*root,char *key){
+    int len=strlen(key);
+    struct TrieNode *temp=root;
+    int i,index;
+    for(i=0;i<len;i++)
+    {
+        index=CHAR_TO_INDEX(key[i]);
+        if(!temp->child[index]){
+            temp->child[index]=getNode();
+        }
+        temp=temp->child[index];
+    }
+    temp->wordEnd=true;
+}
+
+
+bool search(struct TrieNode*root,char *key){
+    int len=strlen(key);
+    struct TrieNode*temp=root;
+    for(int i=0;i<len;i++)
+    
+    {
+        int index=CHAR_TO_INDEX(key[i]);
+        if(!temp->child[index]){
+            return false;
+        }
+        temp=temp->child[index];
+    }
+    return temp->wordEnd;
+}
+int main(){
+    char dictionary[100][100];
+    int n;
+    printf("Enter the number of words in the dictionary:\n");
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+    {
+        scanf("%s",dictionary[i]);
+    }
+    
+  struct TrieNode*root=getNode();  
+    for(int i=0;i<n;i++)
+    {
         insert(root,dictionary[i]);
     }
     printf("Enter the word to be searched:\n");
     char *key;
-    key  = (char * )malloc(30 * sizeof(char));
-
+    key=(char*)malloc(30*sizeof(char));
     scanf("%s",key);
-    printf(search(root,key)?"Present in the dictionary":"Not present in the dictionary");
-
-  return 0;
+    printf("%s ",key);
+    printf(search(root,key)?"is present in the trie":"is not present in the trie");
+    
+    
 }
